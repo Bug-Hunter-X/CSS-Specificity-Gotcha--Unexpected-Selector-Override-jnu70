@@ -1,0 +1,29 @@
+The following CSS code snippet demonstrates an uncommon error related to specificity and the cascade in CSS:
+
+```css
+div {
+  color: blue;
+}
+
+.special {
+  color: red;
+}
+
+#unique {
+  color: green;
+}
+
+#unique.special {
+  color: purple; /* This will not override the specificity of #unique */
+}
+
+#unique.special div {
+  color: yellow; /* This *will* override #unique due to higher specificity */
+}
+```
+
+The unexpected behavior is observed in the last line.  Although `#unique.special` is intended to set the `color` to `purple`, it is overridden by `#unique.special div`, which sets the `color` to `yellow`.
+
+This is because `#unique.special div` has a higher specificity than `#unique.special` despite its seeming redundancy. The specificity calculation includes the number of IDs, classes, and element types within the selector.  `#unique.special div` has one ID, one class, and one element, resulting in a higher specificity than `#unique.special` which only has one ID and one class. Thus, the `color: yellow` declaration takes precedence. This is a subtle error as one may assume the element selector only applies to children of `#unique.special` and not add to the specificity. 
+
+This scenario highlights that specificity is not simply about the number of selectors, but rather the *type* of selectors.
